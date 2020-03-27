@@ -16,8 +16,10 @@ def make_kafka_safe(raw_data):
     string data produced to Kafka
     """
     if sys.version_info[0] == 3 and isinstance(raw_data, str):
-        return raw_data.encode('utf-8')
-    return raw_data
+        resp = raw_data.encode('utf-8')
+    else:
+        resp = raw_data
+    return resp
 
 
 class TransactionLogger(object):
@@ -25,7 +27,7 @@ class TransactionLogger(object):
                  broker,
                  vertical,
                  host=socket.gethostname(),
-                 async=False,
+                 async_commit=False,
                  retries=1,
                  key_serializer=make_kafka_safe,
                  value_serializer=make_kafka_safe,
@@ -33,7 +35,7 @@ class TransactionLogger(object):
         self.broker = broker
         self.this_host = host
         self.vertical = vertical
-        self.async = async
+        self.async_commit = async_commit
         self.topic = _get_topic_from_vertical(vertical)
         kwargs['api_version'] = kwargs.get('api_version',
                                            CURRENT_PROD_BROKER_VERSION)
@@ -59,33 +61,36 @@ class TransactionLogger(object):
     def Modify(self,
                txn_id,
                amount="#",
-               skus=[],
+               skus=None,
                detail="#",
                userid="#",
                email="#",
                phone="#"):
+        skus = [] if skus is None else skus
         self._send_log("MODIFY", txn_id, amount, skus, detail, userid, email,
                        phone)
 
     def Cancel(self,
                txn_id,
                amount="#",
-               skus=[],
+               skus=None,
                detail="#",
                userid="#",
                email="#",
                phone="#"):
+        skus = [] if skus is None else skus
         self._send_log("CANCEL", txn_id, amount, skus, detail, userid, email,
                        phone)
 
     def Fulfil(self,
                txn_id,
                amount="#",
-               skus=[],
+               skus=None,
                detail="#",
                userid="#",
                email="#",
                phone="#"):
+        skus = [] if skus is None else skus
         self._send_log("FULFIL", txn_id, amount, skus, detail, userid, email,
                        phone)
 

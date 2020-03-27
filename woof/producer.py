@@ -19,7 +19,7 @@ class FeedProducer(object):
                  key_serializer=make_kafka_safe,
                  value_serializer=make_kafka_safe,
                  retries=3,
-                 async=False,
+                 async_commit=False,
                  **kwargs):
         try:
             kwargs['api_version'] = kwargs.get('api_version',
@@ -29,7 +29,7 @@ class FeedProducer(object):
                                       value_serializer=value_serializer,
                                       retries=retries,
                                       **kwargs)
-            self.async = async
+            self.async_commit = async_commit
         except Exception as e:
             log.error("[feedproducer log] Constructor error ERROR %s  \n",
                       str(e))
