@@ -1,7 +1,6 @@
-import sys
 import os
-from setuptools import setup, Command
 
+from setuptools import setup
 
 here = os.path.abspath(os.path.dirname(__file__))
 
@@ -10,9 +9,6 @@ with open('VERSION', 'r') as v:
 
 with open(os.path.join(here, 'README.md')) as f:
     README = f.read()
-
-
-
 
 
 setup(
@@ -36,7 +32,8 @@ setup(
         "Programming Language :: Python :: 2",
         "Programming Language :: Python :: 2.6",
         "Programming Language :: Python :: 2.7",
+        "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: Implementation :: PyPy",
         "Topic :: Software Development :: Libraries :: Python Modules",
-    ]
+    ],
 )

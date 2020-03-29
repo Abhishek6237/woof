@@ -36,7 +36,7 @@ class TransactionLogger(object):
         self.this_host = host
         self.vertical = vertical
         self.async_commit = async_commit
-        self.topic = _get_topic_from_vertical(vertical)
+        self.topic = self._get_topic_from_vertical(vertical)
         kwargs['api_version'] = kwargs.get('api_version',
                                            CURRENT_PROD_BROKER_VERSION)
         # thread safe producer, uses default murmur2 partiioner by default
@@ -149,6 +149,6 @@ class TransactionLogger(object):
             [self.this_host, str(time.time()), verb, txn_id, amount, skus_as_string, detail, userid, email, phone]
         )
 
-
-def _get_topic_from_vertical(vertical):
-    return "_".join(["TRANSACTIONS", vertical])
+    @staticmethod
+    def _get_topic_from_vertical(vertical):
+        return "_".join(["TRANSACTIONS", vertical])
